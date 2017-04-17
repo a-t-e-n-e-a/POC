@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <list>
 #include <algorithm>
 
 using namespace std;
@@ -44,7 +44,7 @@ class Barrel{
 public:
 	int x;
 	int y;
-	int cont;
+	int content;
 	Barrel(int vx, int vy, int c);
 	Barrel(const Barrel &b);
 	Barrel();
@@ -57,26 +57,28 @@ Barrel::Barrel(int vx, int vy, int c){
 Barrel::Barrel(const Barrel &b){
 	x=b.x;
 	y=b.y;
-	content=s.content;
+	content=b.content;
 }
 Barrel::Barrel(){
 	x=-1;
 	y=-1;
 	content=-1;
 }
-Barrel & find_rhum_fats(&ship, list<Barrel> &barrels){
+Barrel & find_rhum_fast(int x, int y, list<Barrel> &barrels){
 	Ship result;
 	int min=100;
 	int dist;
-	barrel t;
+	Barrel t;
 	for (Barrel &b : barrels){
-	    dist=abs(b.x-ship.x)+abs(b.y-ship.y);
+	    //if (
+	    dist=abs(b.x-x)+abs(b.y-y);
+	    cerr << "dist " << dist << " = " << b.x <<" " <<x<< " + " << b.y << " " << y << endl;
 	    if(dist<min){
 	        t=b;
 	        min=dist;
 	        }
 	    } 
-	return &t; 
+	return t; 
 }
 int main()
 {
@@ -97,17 +99,24 @@ int main()
         int arg2;
         int arg3;
         int arg4;
+        int sx, sy;
         for (int i = 0; i < entityCount; i++) {
             cin >> entityId >> entityType >> x >> y >> arg1 >> arg2 >> arg3 >> arg4; cin.ignore();
+            //cerr << entityType << arg1 << endl;
             if(entityType=="SHIP" && arg1==1){
-                ships.add(Ship(arg1,x,y,arg3));    //1 equals my ship
+                ships.push_back(Ship(arg4,x,y,arg3));
+                sx=x;
+                sy=y;
+                cerr << "x " <<x <<" y " << y << endl;
+                //1 equals my ship
             }
             else if(entityType=="BARREL"){
-                barrels.add(Barrel(x,y,arg1));   
+                barrels.push_back(Barrel(x,y,arg1));   
+                //cerr << "barrel! "<< x << " " << y << endl;
             }
         }
-        Ship mine=ships.front;
-        Barrel target=find_rhum_fast(mine, barrels);
+        //Barrel target=find_rhum_fast(sx, sy, barrels);
+        Barrel target=find_rhum_fast(ships.front().x, ships.front().y, barrels);
         for (int i = 0; i < myShipCount; i++) {
 
             // Write an action using cout. DON'T FORGET THE "<< endl"
