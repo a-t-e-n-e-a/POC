@@ -151,15 +151,15 @@ int main()
         if(compute_distance(victim.first, victim.second,x,y)<4){
             cout << "FIRE " << victim.first << " " << victim.second << endl; // Any valid action, such as "WAIT" or "MOVE x y"
         }
-        else {
+
+        for (int i = 0; i < myShipCount; i++) {
             Barrel target=find_rhum_fast(ships.front().x, ships.front().y, barrels);
-            for (int i = 0; i < myShipCount; i++) {
-    
-                // Write an action using cout. DON'T FORGET THE "<< endl"
-                // To debug: cerr << "Debug messages..." << endl;
-    
-                cout << "MOVE " << target.x << " " << target.y << endl; // Any valid action, such as "WAIT" or "MOVE x y"
+            if (target.x >=0 && target.y >=0){
+            cout << "MOVE " << target.x << " " << target.y << endl; // Any valid action, such as "WAIT" or "MOVE x y"
             }
+            else cout << "WAIT" << endl;
+            ships.pop_front();
+            
         }
     }
 }
