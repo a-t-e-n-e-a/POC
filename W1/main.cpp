@@ -76,12 +76,12 @@ int compute_distance(int x1, int y1, int x2, int y2){
 }
 Barrel & find_rhum_fast(int x, int y, list<Barrel> &barrels){
 	int min=100;
-	int dist;
+	float dist;
 	Barrel t;
 	for (Barrel &b : barrels){
 	    //if (
 	    //dist=abs(b.x-x)+abs(b.y-y);
-	    dist=compute_distance(b.x,b.y,x,y);
+	    dist=compute_distance(b.x,b.y,x,y)-b.content/20;
 	    cerr << "dist " << dist << " = " << b.x <<" " <<x<< " + " << b.y << " " << y << endl;
 	    if(dist<min){
 	        t=b;
