@@ -75,7 +75,6 @@ int compute_distance(int x1, int y1, int x2, int y2){
 
 }
 Barrel & find_rhum_fast(int x, int y, list<Barrel> &barrels){
-	Ship result;
 	int min=100;
 	int dist;
 	Barrel t;
@@ -86,6 +85,22 @@ Barrel & find_rhum_fast(int x, int y, list<Barrel> &barrels){
 	    cerr << "dist " << dist << " = " << b.x <<" " <<x<< " + " << b.y << " " << y << endl;
 	    if(dist<min){
 	        t=b;
+	        min=dist;
+	        }
+	    } 
+	return t; 
+}
+pair<int,int> find_victim(int x, int y, list<Ship> & enemies){
+	int min=100;
+	int dist;
+	pair<int,int> t;
+	for (Ship &se : enemies){
+	    //if (
+	    //dist=abs(b.x-x)+abs(b.y-y);
+	    dist=compute_distance(se.x,se.y,x,y);
+	    cerr << "dist " << dist << " = " << se.x <<" " <<x<< " + " << se.y << " " << y << endl;
+	    if(dist<min){
+	        t=make_pair(se.x,se.y);
 	        min=dist;
 	        }
 	    } 
@@ -132,14 +147,19 @@ int main()
                 //cerr << "barrel! "<< x << " " << y << endl;
             }
         }
-        
-        Barrel target=find_rhum_fast(ships.front().x, ships.front().y, barrels);
-        for (int i = 0; i < myShipCount; i++) {
-
-            // Write an action using cout. DON'T FORGET THE "<< endl"
-            // To debug: cerr << "Debug messages..." << endl;
-
-            cout << "MOVE " << target.x << " " << target.y << endl; // Any valid action, such as "WAIT" or "MOVE x y"
+        pair<int,int> victim=find_victim(ships.front().x, ships.front().y, enemies);
+        if(compute_distance(victim.first, victim.second,x,y)<4){
+            cout << "FIRE " << victim.first << " " << victim.second << endl; // Any valid action, such as "WAIT" or "MOVE x y"
+        }
+        else {
+            Barrel target=find_rhum_fast(ships.front().x, ships.front().y, barrels);
+            for (int i = 0; i < myShipCount; i++) {
+    
+                // Write an action using cout. DON'T FORGET THE "<< endl"
+                // To debug: cerr << "Debug messages..." << endl;
+    
+                cout << "MOVE " << target.x << " " << target.y << endl; // Any valid action, such as "WAIT" or "MOVE x y"
+            }
         }
     }
 }
