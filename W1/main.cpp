@@ -64,6 +64,16 @@ Barrel::Barrel(){
 	y=-1;
 	content=-1;
 }
+int compute_distance(int x1, int y1, int x2, int y2){
+    int xp1 = x1 - (y1 - (y1 & 1)) / 2;
+    int zp1 = y1;
+    int yp1 = -(xp1 + zp1);
+    int xp2 = x2 - (y2 - (y2 & 1)) / 2;
+    int zp2 = y2;
+    int yp2 = -(xp2 + zp2);
+    return (abs(xp1 - xp2) + abs(yp1 - yp2) + abs(zp1 - zp2)) / 2;
+
+}
 Barrel & find_rhum_fast(int x, int y, list<Barrel> &barrels){
 	Ship result;
 	int min=100;
@@ -71,7 +81,8 @@ Barrel & find_rhum_fast(int x, int y, list<Barrel> &barrels){
 	Barrel t;
 	for (Barrel &b : barrels){
 	    //if (
-	    dist=abs(b.x-x)+abs(b.y-y);
+	    //dist=abs(b.x-x)+abs(b.y-y);
+	    dist=compute_distance(b.x,b.y,x,y);
 	    cerr << "dist " << dist << " = " << b.x <<" " <<x<< " + " << b.y << " " << y << endl;
 	    if(dist<min){
 	        t=b;
@@ -89,7 +100,7 @@ int main()
         cin >> myShipCount; cin.ignore();
         int entityCount; // the number of entities (e.g. ships, mines or cannonballs)
         cin >> entityCount; cin.ignore();
-        list<Ship> ships;
+        list<Ship> ships, enemies;
         list<Barrel> barrels;
         int x;
         int y;
@@ -103,19 +114,25 @@ int main()
         for (int i = 0; i < entityCount; i++) {
             cin >> entityId >> entityType >> x >> y >> arg1 >> arg2 >> arg3 >> arg4; cin.ignore();
             //cerr << entityType << arg1 << endl;
-            if(entityType=="SHIP" && arg1==1){
+            if(entityType=="SHIP" && arg4==1){
                 ships.push_back(Ship(arg4,x,y,arg3));
                 sx=x;
                 sy=y;
                 cerr << "x " <<x <<" y " << y << endl;
                 //1 equals my ship
             }
+            else if(entityType=="SHIP" && arg4==0){
+                enemies.push_back(Ship(arg4,x,y,arg3));
+                sx=x;
+                sy=y;
+                cerr << "x " <<x <<" y " << y << endl;
+            }
             else if(entityType=="BARREL"){
                 barrels.push_back(Barrel(x,y,arg1));   
                 //cerr << "barrel! "<< x << " " << y << endl;
             }
         }
-        //Barrel target=find_rhum_fast(sx, sy, barrels);
+        
         Barrel target=find_rhum_fast(ships.front().x, ships.front().y, barrels);
         for (int i = 0; i < myShipCount; i++) {
 
